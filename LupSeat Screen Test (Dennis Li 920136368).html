@@ -1,0 +1,515 @@
+
+<!-- saved from url=(0090)file:///C:/Users/den/Desktop/test/LupSeat%20Screen%20Test%20(Dennis%20Li%20920136368).html -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <link rel="stylesheet" href="./LupSeat Screen Test (Dennis Li 920136368)_files/style.css">
+  </head>
+  <body>
+    <div id="outer">
+      <div id="windowBorder">
+        <div id="window">
+          <div id="header">
+            <div>
+              <b>LupSeat Screen Test (Dennis Li 920136368)</b>
+            </div>
+          </div>
+          <div id="project">
+            <table id="all">
+              <tbody>
+                <tr>
+                  <td>
+                    <table style="width: 630px;">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input type="button" id="add" value="Add">
+                            <input type="button" id="delete" value="Delete" onclick="deleteRow()">
+                          </td>
+                          <td></td>
+                          <td style="float: right;">
+                            <input type="button" id="collectData" value="Collect Data" onclick="collectData()">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <td>
+                    <div>
+                      <table id="studentTable">
+                        <tbody>
+                          <tr>
+                            <th style="width: 20px;"><input type="checkbox" id="checkboxAll" onclick="checkAll(this)"></th>
+                            <th>Name:</th>
+                            <th>Email:</th>
+                            <th>Level:</th>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <table id="insertTable">
+                        <tbody>
+                          <tr>
+                            <th></th>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <dialog id="validationDialog" style="background-color: transparent; border: 2px solid #353e9f;">
+          <form method="dialog" style="background-color: lightblue;">
+            <table id="dialogTable" style="box-shadow: 0px 0px 3px #000000;">
+              <tbody>
+                <tr>
+                  <th>Name:</th>
+                  <th>Email:</th>
+                  <th>Level:</th>
+                </tr>
+                <tr id="studentRow1">
+                  <td>
+                    <input class="input" type="text" id="name0" onclick="selcectDialog(this)" onchange="if(!validateName(this.value)){alert('Name can only contain letters and cannot be empty'); this.focus();}">
+                  </td>
+                  <td>
+                    <input class="input" type="text" id="email0" onclick="selcectDialog(this)" onchange="if(!validateEmail(this.value)){alert('Email is invalid'); this.focus();}">
+                  </td>
+                  <td>
+                    <select class="select" id="level0" onclick="selcectDialog(this)">
+                      <option id="select year" selected="selected" disabled="disabled" hidden="hidden">Select your current year</option>
+                      <option id="First">First</option>
+                      <option id="Second">Second</option>
+                      <option id="Third">Third</option>
+                      <option id="Forth">Forth</option>
+                    </select>
+                    year
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="text-align: center; margin-top: 2px;">
+              <!--<button id="cancel" value="cancel">Cancel</button>-->
+              <input type="button" id="cancel" value="Cancel" onclick="closeDialog()">
+              <!--<button id="confirm" value="default">Confirm</button>-->
+              <input type="button" id="confirm" value="Confirm" onclick="confirmDialog()">
+            </div>
+          </form
+        </dialog>
+      </div>
+    </div>
+    <script>
+
+      const add = document.getElementById("add");
+      const validationDialog = document.getElementById("validationDialog");
+      var dialogTable = document.getElementById("dialogTable");
+      const dialogTableBackup = document.getElementById("dialogTable").innerHTML;
+      var dialogName;
+      var dialogEmail;
+      var dialogLevel;
+
+      var addId;
+
+      if(typeof validationDialog.showModal !== 'function'){
+        validationDialog.hidden = true;
+      }
+
+      add.addEventListener('click', ()=>{
+        if(typeof validationDialog.showModal === 'function'){
+          dialogName = validationDialog.querySelector("#name0");
+          dialogEmail = validationDialog.querySelector("#email0");
+          dialogLevel = validationDialog.querySelector("#level0");
+          addId = "add";
+          validationDialog.showModal();
+        }else{
+          alert("Dialog not supported");
+        }
+      });
+
+      function selcectDialog(obj){
+        dialogName.parentElement.style.borderColor = "gray";
+        dialogEmail.parentElement.style.borderColor = "gray";
+        dialogLevel.parentElement.style.borderColor = "gray";
+
+        obj.parentElement.style.borderColor = "blue";
+      }
+
+      function closeDialog(){
+        dialogTable.innerHTML = dialogTableBackup;
+        validationDialog.close();
+      }
+
+      function confirmDialog(){
+        dialogName.parentElement.style.borderColor = "gray";
+        dialogEmail.parentElement.style.borderColor = "gray";
+        dialogLevel.parentElement.style.borderColor = "gray";
+        var validatedData = {};
+        if(!validateName(dialogName.value)){
+          alert("Name can only contain letters and cannot be empty");
+          dialogName.parentElement.style.borderColor = "blue";
+          dialogName.focus();
+        }else if(!validateEmail(dialogEmail.value)){
+          alert("Email is invalid");
+          dialogEmail.parentElement.style.borderColor = "blue";
+          dialogEmail.focus();
+        }else if(!validateLevel(dialogLevel.value)){
+          alert("Must select an option");
+          dialogLevel.parentElement.style.borderColor = "blue";
+          dialogLevel.focus();
+        }else{
+          validatedData["name"] = dialogName.value;
+          validatedData["email"] = dialogEmail.value;
+          validatedData["level"] = dialogLevel.value;
+          if(addId.replace(/[0-9]/g, '') == "insert"){
+            insertRow(addId, validatedData);
+          }else if(addId == "add"){
+            addRow(validatedData);
+          }
+          closeDialog();
+        }
+
+      }
+
+      var rowNum = 1;
+      var tableData = {};
+
+      var allCheckedStatus = false;
+      var prevSelected;
+
+      function deleteRow(){
+          var studentTableRow = document.getElementById("studentTable");
+
+          for(var i = 1, row; row = studentTableRow.rows[i]; i++){
+              var checkboxSibling = row.childNodes[0].childNodes[0];
+              if(checkboxSibling.checked == true){
+                  var numId = checkboxSibling.id.split("checkbox");
+                  document.getElementById("insertRow"+numId[1]).remove();
+                  row.remove();
+                  i--;
+              }
+          }
+          document.getElementById("checkboxAll").checked = false;
+      }
+
+      function checkStatusChange(checkbox){
+          var studentTableRow = document.getElementById("studentTable");
+
+           if(checkbox.checked == true){
+              document.getElementById("checkboxAll").checked = true;
+              for(var i = 1, row; row = studentTableRow.rows[i]; i++){
+                  var checkboxSibling = row.childNodes[0].childNodes[0];
+                  if(checkboxSibling.checked == false){
+                      document.getElementById("checkboxAll").checked = false;
+                      break;
+                  }
+              }
+          }else{
+              document.getElementById("checkboxAll").checked = false;
+          }
+      }
+
+      function checkAll(checkbox){
+          var studentTableRow = document.getElementById("studentTable");
+
+          if(checkbox.checked == true){
+              document.getElementById("checkboxAll").checked = true;
+              for(var i = 1, row; row = studentTableRow.rows[i]; i++){
+                  row.childNodes[0].childNodes[0].checked = true;
+              }
+          }else{
+              document.getElementById("checkboxAll").checked = false;
+              for(var i = 1, row; row = studentTableRow.rows[i]; i++){
+                  row.childNodes[0].childNodes[0].checked = false;
+              }
+          }
+      }
+
+      function insertRow(id, validatedData){
+          var fieldNum = id.split("insert");
+
+          document.getElementById("studentRow".concat(fieldNum[1])).before(addField(validatedData));
+          document.getElementById("insertRow".concat(fieldNum[1])).before(addInsertButton());
+          checkStatusChange(document.getElementById("studentRow".concat(fieldNum[1])).previousSibling.childNodes[0].childNodes[0]);
+
+          rowNum++;
+      }
+
+      function addRow(validatedData){
+          document.getElementById("studentTable").appendChild(addField(validatedData));
+          document.getElementById("insertTable").appendChild(addInsertButton());
+
+          checkStatusChange(document.getElementById("studentTable").lastChild.childNodes[0].childNodes[0]);
+
+          rowNum++;
+      }
+
+      function addField(validatedData) {
+
+          var row = document.createElement("tr");
+          var columnCheckbox = document.createElement("th");
+          var columnName = document.createElement("td");
+          var columnEmail = document.createElement("td");
+          var columnLevel = document.createElement("td");
+
+          row.setAttribute("id", "studentRow"+rowNum);
+
+          columnCheckbox.setAttribute("style","border-top: hidden; border-bottom: hidden; border-left: hidden; background-color: white;")
+
+          columnName.setAttribute("ondblclick", "undisableField('name" + rowNum + "')");
+          columnName.setAttribute("onclick", "validateSelect('name" + rowNum + "', 'name')");
+
+          columnEmail.setAttribute("ondblclick", "undisableField('email" + rowNum + "')");
+          columnEmail.setAttribute("onclick", "validateSelect('email" + rowNum + "', 'email')");
+
+          columnLevel.setAttribute("ondblclick", "undisableField('level" + rowNum + "')");
+          columnLevel.setAttribute("onclick", "validateSelect('level" + rowNum + "', 'level')");
+
+          var checkbox = document.createElement("input");
+          checkbox.setAttribute("type", "checkbox");
+          checkbox.setAttribute("id", "checkbox".concat(rowNum));
+          checkbox.setAttribute("onclick", "checkStatusChange(this)");
+          columnCheckbox.appendChild(checkbox);
+
+          var name = document.createElement("input");
+          name.setAttribute("class", "input");
+          name.setAttribute("type", "text");
+          name.setAttribute("id", "name".concat(rowNum));
+          name.setAttribute("value", validatedData["name"]);
+          name.setAttribute("disabled", "disabled");
+          name.setAttribute("onkeypress", "disableOnEnter(event, id, 'name')");
+          columnName.appendChild(name);
+
+          var email = document.createElement("input");
+          email.setAttribute("class", "input");
+          email.setAttribute("type", "text");
+          email.setAttribute("id", "email".concat(rowNum));
+          email.setAttribute("value", validatedData["email"]);
+          email.setAttribute("disabled", "disabled");
+          email.setAttribute("onkeypress", "disableOnEnter(event, id, 'email')");
+          columnEmail.append(email);
+
+          var level = document.createElement("select");
+          level.setAttribute("class", "select");
+          level.setAttribute("id", "level".concat(rowNum));
+          level.setAttribute("disabled","disabled");
+          level.setAttribute("onkeypress", "disableOnEnter(event, id, 'level')");
+
+          var optionsSelect = document.createElement("option");
+          optionsSelect.setAttribute("id", "select year");
+          optionsSelect.setAttribute("selected", "selected");
+          optionsSelect.setAttribute("disabled", "disabled");
+          optionsSelect.setAttribute("hidden", "hidden");
+          optionsSelect.innerHTML = "Select your current year";
+
+          var optionsFirst = document.createElement("option");
+          optionsFirst.setAttribute("id", "First");
+          optionsFirst.innerHTML = "First";
+
+          var optionsSecond = document.createElement("option");
+          optionsSecond.setAttribute("id", "Second");
+          optionsSecond.innerHTML = "Second";
+
+          var optionsThird = document.createElement("option");
+          optionsThird.setAttribute("id", "Third");
+          optionsThird.innerHTML = "Third";
+
+          var optionsForth = document.createElement("option");
+          optionsForth.setAttribute("id", "Forth");
+          optionsForth.innerHTML = "Forth";
+
+          if(validatedData["level"] == "First"){
+            optionsFirst.setAttribute("selected", "selected");
+          }else if(validatedData["level"] == "Second"){
+            optionsSecond.setAttribute("selected", "selected");
+          }else if(validatedData["level"] == "Third"){
+            optionsThird.setAttribute("selected", "selected");
+          }else if(validatedData["level"] == "Forth"){
+            optionsForth.setAttribute("selected", "selected");
+          }
+
+          level.appendChild(optionsSelect);
+          level.appendChild(optionsFirst);
+          level.appendChild(optionsSecond);
+          level.appendChild(optionsThird);
+          level.appendChild(optionsForth);
+
+          columnLevel.append(level, " year");
+
+          row.appendChild(columnCheckbox);
+          row.appendChild(columnName);
+          row.appendChild(columnEmail);
+          row.appendChild(columnLevel);
+
+          return row;
+      }
+
+      function addInsertButton(){
+          var row = document.createElement("tr");
+          row.setAttribute("id", "insertRow" + rowNum);
+          row.setAttribute("onmouseleave", "hideButton(id, 'insertRow', 'insert');");
+          row.setAttribute("onmouseover", "showButton(id, 'insertRow', 'insert');");
+
+          var columnName = document.createElement("td");
+
+          var insert = document.createElement("input");
+          insert.setAttribute("type", "button");
+          insert.setAttribute("class", "insert");
+          insert.setAttribute("id", "insert".concat(rowNum));
+          insert.setAttribute("value", "+");
+          insert.style.visibility = "hidden";
+
+          columnName.appendChild(insert);
+          row.append(columnName);
+
+          row.addEventListener('click', ()=>{
+            if(typeof validationDialog.showModal === 'function'){
+              dialogName = validationDialog.querySelector("#name0");
+              dialogEmail = validationDialog.querySelector("#email0");
+              dialogLevel = validationDialog.querySelector("#level0");
+              addId = insert.id;
+              validationDialog.showModal();
+            }else{
+              alert("Dialog not supported");
+            }
+          });
+
+          return row;
+      }
+
+      function validateSelect(id, str){
+          if(prevSelected != null && prevSelected != id){
+              if(!validations(prevSelected, prevSelected.replace(/[0-9]/g, ''))){
+                  badInput(prevSelected, prevSelected.replace(/[0-9]/g, ''));
+                  return;
+              }
+
+              document.getElementById(prevSelected).parentElement.style.borderColor = "gray";
+              document.getElementById(prevSelected).setAttribute("disabled", "disabled");
+          }
+          document.getElementById(id).parentElement.style.borderColor = "blue";
+          prevSelected = id;
+      }
+
+      function badInput(id, str){
+          var element = document.getElementById(id);
+          if(str == "name"){
+            element.removeAttribute("disabled");
+            element.value = "";
+            alert("Name can only contain letters and cannot be empty");
+            element.focus();
+
+          }else if(str == "email"){
+            element.removeAttribute("disabled");
+            element.value = "";
+            alert("Email is invalid");
+            element.focus();
+          }else if(str == "level"){
+              element.removeAttribute("disabled");
+              alert("Must select an option");
+              element.focus();
+          }
+      }
+
+      function validations(id, str){
+          var element = document.getElementById(id);
+          if(str == "name"){
+              if(validateName(element.value)){
+                  return true;
+              }
+          }else if(str == "email"){
+              if(validateEmail(element.value)){
+                  return true;
+              }
+          }else if(str == "level"){
+              if(validateLevel(element.value)){
+                  return true;
+              }
+          }
+          return false;
+      }
+
+      function validateLevel(value){
+          if(value == "Select your current year"){
+              return false;
+          }
+          return true;
+      }
+
+      function validateName(name){
+          if(name.trim() != "" && name.match(/^[a-z ,.'-]+$/i)){
+              return true;
+          }
+          return false;
+      }
+
+      function validateEmail(email){
+          return email.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+      }
+
+      function hideButton(id, rowName, buttonName){
+          var num = id.split(rowName);
+          document.getElementById(buttonName.concat(num[1])).style.visibility = "hidden";
+      }
+
+      function showButton(id, rowName, buttonName){
+          var num = id.split(rowName);
+          document.getElementById(buttonName.concat(num[1])).style.visibility = "visible";
+
+      }
+
+      function disableField(id, str){
+          var num = id.split(str);
+          var element = document.getElementById(id);
+          element.value = element.value.trim();
+          if(!validations(id, str)){
+              badInput(id, str);
+              return;
+          }
+          element.setAttribute("disabled","disabled");
+      }
+
+      function undisableField(id){
+          var element = document.getElementById(id);
+          if(element.hasAttribute("disabled")){
+              element.removeAttribute("disabled");
+              if(element.className == "input"){
+                  element.select();
+              }else if(element.className == "select"){
+                  element.focus();
+              }
+          }
+      }
+
+      function disableOnEnter(event, id, str){
+          if(event.keyCode == 13){
+              disableField(id, str);
+          }
+      }
+
+      function collectData(){
+        tableData = {};
+        for(var i = 1, row; row = document.getElementById("studentTable").rows[i]; i++){
+          tableData[i+""] = {
+            "name": row.cells.item(1).childNodes[0].value,
+            "email": row.cells.item(2).childNodes[0].value,
+            "level": row.cells.item(3).childNodes[0].value
+          };
+        }
+        console.log(tableData);
+      }
+
+    </script>
+  </body>
+</html>

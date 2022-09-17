@@ -1,0 +1,184 @@
+*{
+	margin: 0;
+	padding: 0;
+
+}
+#outer{
+	position: relative;
+	background-color: #fbf7ff;
+	height: 100%;
+	min-height: 712px;
+	min-width: 872px;
+}
+#validationDialog{
+	margin: auto;
+	border: 0;
+	border-radius: 2px;
+}
+#windowBorder{
+	position: absolute;
+	background-color: #353e9f;
+	top: 2%;
+	bottom: 2%;
+	left: 2%;
+	right: 2%;
+	border-radius: 10px;
+	box-shadow: 0px 1px 4px #000000;
+}
+#window{
+	position: absolute;
+	background-color: #fbf7ff;
+	top: 15px;
+	bottom: 15px;
+	left: 15px;
+	right: 15px;
+	border-radius: 10px;
+
+}
+#header{
+	position: absolute;
+	top: 2%;
+	left: 4.8%;
+	right: 4.8%;
+	height: 50px;
+	padding-top: 20px;
+	padding-left: 40px;
+	background-color: #02a0fd;
+	color: white;
+	border-radius: 5px;
+}
+#header.div{
+	font: 'Fira-Sans', sans-serif;
+}
+
+#project{
+	position: absolute;
+	top: 14%;
+	right: 4.8%;
+	left: auto;
+	background-color: white;
+	height: 550px;
+	width: 730px;
+	overflow: auto;
+	box-shadow: 0px 1px 4px #000000;
+	border-radius: 2px;
+}
+#all{
+	width: 700px;
+	margin-top: 10px;
+	padding-left: 40px;
+}
+#cancel, #confirm, #delete, #add {
+	margin: 4px;
+}
+#delete, #cancel{
+	height: 45px;
+	width: 100px;
+	padding: 10px 10px 10px;
+	border: 0;
+	background-color: orangered;
+	color: white;
+	border-radius: 5px;
+}
+#delete:active, #cancel:active{
+	background-color: orange;
+}
+#collectData{
+	height: 45px;
+	width: 100px;
+	padding: 10px 10px 10px;
+	border: 0;
+	background-color: #8e659a;
+	color: white;
+	border-radius: 5px;
+}
+#collectData:active{
+	background-color: #629d70;
+}
+#add, #confirm{
+	height: 45px;
+	width: 100px;
+	padding: 10px 10px 10px;
+	border: 0;
+	background-color: darkblue;
+	color: white;
+	border-radius: 5px;
+}
+#add:active, #confirm:active{
+	background-color: blue;
+}
+.insert{
+	background-color: transparent;
+	border: 0;
+	color: gray;
+	font-size: 20px;
+	padding-left: 10px;
+}
+input[type='checkbox']{
+	width: 16px;
+	height: 16px;
+}
+#studentTable{
+	width: 630px;
+	border-spacing: 0;
+}
+#dialogTable{
+	border-spacing: 0;
+}
+#studentTable td, #dialogTable td{
+	height: 30px;
+	border: 1.8px solid gray;
+	background: white;
+}
+#studentTable th, #dialogTable th{
+	background-color: lightblue;
+	height: 30px;
+	padding: 4px;
+}
+#studentTable input, #dialogTable input{
+	font-size: 100%;
+	border: 0;
+}
+#studentTable input:focus, #dialogTable input:focus{
+	outline: 0;
+}
+#studentTable input:disabled, #dialogTable input:disabled{
+	background: white;
+	color: black;
+}
+#insertTable{
+	width: 40px;
+	border-spacing: 0;
+	background: white;
+}
+#insertTable th{
+	height: 30px;
+	padding: 4px;
+}
+
+#insertTable td{
+	height: 30px
+}
+/*
+#table tr td{
+	margin: 0;
+	padding: 0;
+}
+
+#table input:focus{
+	outline-color: blue;
+
+}
+
+#table select{
+	border: 2px solid blue;
+
+}
+
+#table select:disabled{
+	background: white;
+	border: 2px solid gray;
+	color: black;
+}
+
+*/
