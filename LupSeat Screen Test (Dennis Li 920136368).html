@@ -248,7 +248,7 @@
           }
       }
       //function parameters: validatedData is the object with all values after validating on input
-      //This function is called to create the rows in data table and insert button; called by the insert button
+      //This function is called to create the rows in data table and insert button; Called by the insert button
       function insertRow(id, validatedData){
           var fieldNum = id.split("insert");
 
@@ -418,7 +418,7 @@
           prevSelected = id;
       }
       //function parameters: id of caller, str of type of validation
-      //This function is called after validating for badinputs to reset the field or original status
+      //This function is called after validating for badinputs to reset the field to original status
       function badInput(id, str){
           var element = document.getElementById(id);
           if(str == "name"){
@@ -477,14 +477,14 @@
           }
           return true;
       }
-      //function parameters: id of caller, rowName is string, buttonName is a string
-      //This function hides button in the row; called by the insert buttons
+      //function parameters: id of caller, rowName is string of the name, buttonName is a string of the name
+      //This function hides insert button in the row; Called by the insert buttons
       function hideButton(id, rowName, buttonName){
           var num = id.split(rowName);
           document.getElementById(buttonName.concat(num[1])).style.visibility = "hidden";
       }
       //function parameters: id of caller, rowName is string, buttonName is a string
-      //This function shows button in the row; called by the insert buttons
+      //This function shows insert button in the row; Called by the insert buttons
       function showButton(id, rowName, buttonName){
           var num = id.split(rowName);
           document.getElementById(buttonName.concat(num[1])).style.visibility = "visible";
@@ -524,7 +524,7 @@
       }
 
       //function parameters: none
-      //This function is used by the collect data button to save table data too the variable table data
+      //This function is used by the collect data button to save table data too the variable table data and outputs to console
       function collectData(){
         tableData = {};
         for(var i = 1, row; row = document.getElementById("studentTable").rows[i]; i++){
