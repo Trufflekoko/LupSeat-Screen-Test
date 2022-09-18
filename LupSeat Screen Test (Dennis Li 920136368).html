@@ -112,6 +112,7 @@
     </div>
     <script>
 
+      //init values for dialog
       const add = document.getElementById("add");
       const validationDialog = document.getElementById("validationDialog");
       var dialogTable = document.getElementById("dialogTable");
@@ -121,11 +122,13 @@
       var dialogLevel;
 
       var addId;
-
+      //function parameters: none
+      //Dialog default setting is set to hidden
       if(typeof validationDialog.showModal !== 'function'){
         validationDialog.hidden = true;
       }
-
+      //function parameters: none
+      //This allows add button to listen for the click event
       add.addEventListener('click', ()=>{
         if(typeof validationDialog.showModal === 'function'){
           dialogName = validationDialog.querySelector("#name0");
@@ -137,7 +140,8 @@
           alert("Dialog not supported");
         }
       });
-
+      //function parameters: obj takes the current object
+      //This function controls current selected border color
       function selcectDialog(obj){
         dialogName.parentElement.style.borderColor = "gray";
         dialogEmail.parentElement.style.borderColor = "gray";
@@ -145,12 +149,14 @@
 
         obj.parentElement.style.borderColor = "blue";
       }
-
+      //function parameters: none
+      //This function controls the cancel button of the dialog
       function closeDialog(){
         dialogTable.innerHTML = dialogTableBackup;
         validationDialog.close();
       }
-
+      //function parameters: none
+      //This function controls the confirm button of the dialog
       function confirmDialog(){
         dialogName.parentElement.style.borderColor = "gray";
         dialogEmail.parentElement.style.borderColor = "gray";
@@ -182,12 +188,15 @@
 
       }
 
+      //init variables for tables
       var rowNum = 1;
       var tableData = {};
 
       var allCheckedStatus = false;
       var prevSelected;
 
+      //function parameters: none
+      //This function deletes all rows of with a checked checkbox
       function deleteRow(){
           var studentTableRow = document.getElementById("studentTable");
 
@@ -203,6 +212,8 @@
           document.getElementById("checkboxAll").checked = false;
       }
 
+      //function parameters: checkbox that checks all checkboxes
+      //This function is called to check status of all checkbox
       function checkStatusChange(checkbox){
           var studentTableRow = document.getElementById("studentTable");
 
@@ -219,7 +230,8 @@
               document.getElementById("checkboxAll").checked = false;
           }
       }
-
+      //function parameters: checkbox that checks all checkboxes
+      //This function is called to check all boxes or uncheck all boxes
       function checkAll(checkbox){
           var studentTableRow = document.getElementById("studentTable");
 
@@ -235,7 +247,8 @@
               }
           }
       }
-
+      //function parameters: validatedData is the object with all values after validating on input
+      //This function is called to create the rows in data table and insert button; called by the insert button
       function insertRow(id, validatedData){
           var fieldNum = id.split("insert");
 
@@ -245,7 +258,8 @@
 
           rowNum++;
       }
-
+      //function parameters: validatedData is the object with all values after validating on input
+      //This function is called to create the rows in data table and insert button; called by the add button
       function addRow(validatedData){
           document.getElementById("studentTable").appendChild(addField(validatedData));
           document.getElementById("insertTable").appendChild(addInsertButton());
@@ -254,9 +268,9 @@
 
           rowNum++;
       }
-
+      //function parameters: validatedData is the object with all values after validating on input
+      //This function is called to create the rows in the data table
       function addField(validatedData) {
-
           var row = document.createElement("tr");
           var columnCheckbox = document.createElement("th");
           var columnName = document.createElement("td");
@@ -268,13 +282,13 @@
           columnCheckbox.setAttribute("style","border-top: hidden; border-bottom: hidden; border-left: hidden; background-color: white;")
 
           columnName.setAttribute("ondblclick", "undisableField('name" + rowNum + "')");
-          columnName.setAttribute("onclick", "validateSelect('name" + rowNum + "', 'name')");
+          columnName.setAttribute("onclick", "validateSelect('name" + rowNum + "')");
 
           columnEmail.setAttribute("ondblclick", "undisableField('email" + rowNum + "')");
-          columnEmail.setAttribute("onclick", "validateSelect('email" + rowNum + "', 'email')");
+          columnEmail.setAttribute("onclick", "validateSelect('email" + rowNum + "')");
 
           columnLevel.setAttribute("ondblclick", "undisableField('level" + rowNum + "')");
-          columnLevel.setAttribute("onclick", "validateSelect('level" + rowNum + "', 'level')");
+          columnLevel.setAttribute("onclick", "validateSelect('level" + rowNum + "')");
 
           var checkbox = document.createElement("input");
           checkbox.setAttribute("type", "checkbox");
@@ -354,7 +368,8 @@
 
           return row;
       }
-
+      //function parameters: none
+      //This function is called create the insert button
       function addInsertButton(){
           var row = document.createElement("tr");
           row.setAttribute("id", "insertRow" + rowNum);
@@ -387,8 +402,9 @@
 
           return row;
       }
-
-      function validateSelect(id, str){
+      //function parameters: id of caller
+      //This function is called to validate previous inputs after slecting another field
+      function validateSelect(id){
           if(prevSelected != null && prevSelected != id){
               if(!validations(prevSelected, prevSelected.replace(/[0-9]/g, ''))){
                   badInput(prevSelected, prevSelected.replace(/[0-9]/g, ''));
@@ -401,7 +417,8 @@
           document.getElementById(id).parentElement.style.borderColor = "blue";
           prevSelected = id;
       }
-
+      //function parameters: id of caller, str of type of validation
+      //This function is called after validating for badinputs to reset the field or original status
       function badInput(id, str){
           var element = document.getElementById(id);
           if(str == "name"){
@@ -409,19 +426,19 @@
             element.value = "";
             alert("Name can only contain letters and cannot be empty");
             element.focus();
-
           }else if(str == "email"){
             element.removeAttribute("disabled");
             element.value = "";
             alert("Email is invalid");
             element.focus();
           }else if(str == "level"){
-              element.removeAttribute("disabled");
-              alert("Must select an option");
-              element.focus();
+            element.removeAttribute("disabled");
+            alert("Must select an option");
+            element.focus();
           }
       }
-
+      //function parameters: id of caller, str of type of validation
+      //This function validates either name, email, or selection input fields
       function validations(id, str){
           var element = document.getElementById(id);
           if(str == "name"){
@@ -439,36 +456,42 @@
           }
           return false;
       }
-
-      function validateLevel(value){
-          if(value == "Select your current year"){
-              return false;
-          }
-          return true;
-      }
-
+      //function parameters: name value is the input of name input field
+      //This function validates the name passed in
       function validateName(name){
           if(name.trim() != "" && name.match(/^[a-z ,.'-]+$/i)){
               return true;
           }
           return false;
       }
-
+      //function parameters: email value is the input of email input field
+      //This function validates the email passed in
       function validateEmail(email){
           return email.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
       }
-
+      //function parameters: value is the value of select input
+      //This function validates the selection/value passed in
+      function validateLevel(value){
+          if(value == "Select your current year"){
+              return false;
+          }
+          return true;
+      }
+      //function parameters: id of caller, rowName is string, buttonName is a string
+      //This function hides button in the row; called by the insert buttons
       function hideButton(id, rowName, buttonName){
           var num = id.split(rowName);
           document.getElementById(buttonName.concat(num[1])).style.visibility = "hidden";
       }
-
+      //function parameters: id of caller, rowName is string, buttonName is a string
+      //This function shows button in the row; called by the insert buttons
       function showButton(id, rowName, buttonName){
           var num = id.split(rowName);
           document.getElementById(buttonName.concat(num[1])).style.visibility = "visible";
 
       }
-
+      //function parameters: id of caller, str is the first part of id
+      //This function disables the input field
       function disableField(id, str){
           var num = id.split(str);
           var element = document.getElementById(id);
@@ -479,7 +502,8 @@
           }
           element.setAttribute("disabled","disabled");
       }
-
+      //function parameters: id of caller
+      //This function undisables the input field
       function undisableField(id){
           var element = document.getElementById(id);
           if(element.hasAttribute("disabled")){
@@ -491,13 +515,16 @@
               }
           }
       }
-
+      //function parameters: event, id of caller, str is the first part of id
+      //This function checks for enter key press
       function disableOnEnter(event, id, str){
           if(event.keyCode == 13){
               disableField(id, str);
           }
       }
 
+      //function parameters: none
+      //This function is used by the collect data button to save table data too the variable table data
       function collectData(){
         tableData = {};
         for(var i = 1, row; row = document.getElementById("studentTable").rows[i]; i++){

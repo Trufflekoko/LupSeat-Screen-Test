@@ -50,7 +50,6 @@
 #header.div{
 	font: 'Fira-Sans', sans-serif;
 }
-
 #project{
 	position: absolute;
 	top: 14%;
@@ -159,26 +158,3 @@ input[type='checkbox']{
 #insertTable td{
 	height: 30px
 }
-/*
-#table tr td{
-	margin: 0;
-	padding: 0;
-}
-
-#table input:focus{
-	outline-color: blue;
-
-}
-
-#table select{
-	border: 2px solid blue;
-
-}
-
-#table select:disabled{
-	background: white;
-	border: 2px solid gray;
-	color: black;
-}
-
-*/
