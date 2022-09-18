@@ -25,4 +25,4 @@ Thie is the LupSeat-Screen-Test screening test
    Others:<br />
      -Double click to enter input field and click once more for cursor.<br />
      -Single clicks will only select fields which are highlighted in blue.<br />
-  
+ 
